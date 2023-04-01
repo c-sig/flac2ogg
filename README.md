@@ -3,7 +3,7 @@ converts flac to ogg 192k~ made specifically for osu!
 
 usage:
 add ffmpeg to path first!!
-you can either run main.py or download the executable in releases and run that instead
+you can either run main.py with python or download the executable in releases and run that instead
 
 logic is basically
 if bitrate is > 192000, decrement quality by some amount
