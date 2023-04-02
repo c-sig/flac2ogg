@@ -22,12 +22,17 @@ class FlacConverter:
 
     def convert_file(self, filename):
         output_filename = os.path.splitext(filename)[0] + ".ogg"
+        temp_filename = os.path.splitext(filename)[0] + "_temp.flac"
+        command = [
+            'ffmpeg', '-y', '-i', filename, '-af', 'adelay=200|200', '-c:a', 'flac', '-ar', '48000', temp_filename
+        ]
+        subprocess.run(command, check=True)
         quality = DEFAULT_QUALITY
         step_size = 0.2  # Starting step size
         min_step_size = 0.000001  # Minimum step size
         while True:
             command = [
-                'ffmpeg', '-y', '-i', filename, '-map', '0:a', '-c:a',
+                'ffmpeg', '-y', '-i', temp_filename, '-map', '0:a', '-c:a',
                 'libvorbis', '-q:a', f'{quality:.4f}', '-ar', '48000', output_filename
             ]
             subprocess.run(command, check=True)
@@ -44,6 +49,7 @@ class FlacConverter:
             else:
                 break
             step_size = max(step_size * 0.9, min_step_size)  # Decrease step size
+        os.remove(temp_filename)
         messagebox.showinfo(
             "Conversion complete",
             f"{filename} has been converted to {output_filename} with a bitrate of {actual_bitrate / 1000:.1f} kbps "
