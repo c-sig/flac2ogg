@@ -42,7 +42,7 @@ class FlacConverter:
                     '-of', 'compact=p=0:nk=1', output_filename
                 ])
             )
-            if actual_bitrate < 191500:
+            if actual_bitrate < 180000:
                 quality += step_size
             elif actual_bitrate > 192000:
                 quality -= step_size
